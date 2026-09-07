@@ -65,6 +65,7 @@ h1 em{font-style:normal;color:var(--red);}
 .civ{border:1.5px solid var(--line);margin-bottom:14px;background:var(--sheet);}
 .civ.risk{border-left:5px solid var(--red);}
 .civ.dec{border-left:5px solid var(--amber);}
+.civ.info{border-left:5px solid var(--green);}
 .civ-h{display:flex;align-items:center;gap:12px;background:var(--blueL);border-bottom:1.5px solid var(--line);padding:9px 14px;}
 .detailbub{flex:none;width:40px;height:40px;border:1.5px solid var(--line);border-radius:50%;background:var(--sheet);
   display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;}
@@ -74,6 +75,7 @@ h1 em{font-style:normal;color:var(--red);}
 .sbadge{font-family:var(--narrow);font-weight:700;font-size:10px;letter-spacing:.1em;padding:4px 9px;border-radius:2px;text-transform:uppercase;white-space:nowrap;}
 .sbadge.risk{background:var(--red);color:#fff;}
 .sbadge.dec{background:#f0d27a;color:#5a4600;}
+.sbadge.ok{background:var(--green);color:#fff;}
 .civ-body{padding:10px 14px 12px;}
 .crow{display:grid;grid-template-columns:132px 1fr;gap:10px;padding:6px 0;border-bottom:1px dashed var(--grid);}
 .crow:last-child{border-bottom:none;}
@@ -223,6 +225,7 @@ h1 em{font-style:normal;color:var(--red);}
 :root{--sans:Arial,Helvetica,sans-serif;--narrow:'Arial Narrow',Arial,sans-serif;}
 @media print{
  html,body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+ body{zoom:.95;}
  .sheet{background-color:var(--sheet)!important;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px)!important;background-size:26px 26px!important;}
  .frame::before{display:block;position:fixed;inset:0;border:4px double var(--line);pointer-events:none;}
  .inner{padding:12px;} .civ.dec + .civ{margin-top:12px;} .tstrip{position:relative;padding-right:55px;}
@@ -235,6 +238,7 @@ h1 em{font-style:normal;color:var(--red);}
  .kn:nth-child(n+4) .tick{top:2px;left:auto;right:4px;}
  .sbadge.risk{background:var(--red);color:white;border:0;}
  .sbadge.dec{background:#f0d27a;color:#5a4600;border:0;}
+ .sbadge.ok{background:var(--green);color:white;border:0;}
  .plan{background:rgba(251,251,249,.94);}
  .civ-h{border-bottom-color:var(--line);}
 }
@@ -264,15 +268,15 @@ h1 em{font-style:normal;color:var(--red);}
 
       <div class="objbar">
         <div class="ol">Objective</div>
-        <div class="ot">Obtain clear direction, responsible party, and commitment dates for the unresolved civil and utility items affecting upcoming work. Information current through September 4, 2026.</div>
+        <div class="ot">Obtain clear direction, responsible party, and commitment dates for the active civil decisions and utility coordination affecting upcoming work. Information current through September 7, 2026.</div>
       </div>
 
       <div class="keynotes">
         <div class="kn"><div class="tick">1</div><div class="kl">Pad certification</div><div class="kv g">COMPLETE</div><div class="kn2">vs 09/09/26 · [actual date TBD]</div></div>
         <div class="kn"><div class="tick">2</div><div class="kl">Foundations</div><div class="kv g">~2 DAYS AHEAD</div><div class="kn2">Target 09/15/26</div></div>
         <div class="kn"><div class="tick">3</div><div class="kl">Floor slab</div><div class="kv">10/07/26</div><div class="kn2">[forecast TBD]</div></div>
-        <div class="kn"><div class="tick">4</div><div class="kl">Perm. power</div><div class="kv r">12/18/26</div><div class="kn2">At risk · CIV-03</div></div>
-        <div class="kn"><div class="tick">5</div><div class="kl">Open civil items</div><div class="kv a">3</div><div class="kn2">CIV-01 / 02 / 03</div></div>
+        <div class="kn"><div class="tick">4</div><div class="kl">Perm. power</div><div class="kv g">12/18/26</div><div class="kn2">On track · CIV-03</div></div>
+        <div class="kn"><div class="tick">5</div><div class="kl">Active items</div><div class="kv a">3</div><div class="kn2">CIV-01 / 02 / 03</div></div>
         <div class="kn"><div class="tick">6</div><div class="kl">Overall</div><div class="kv g">ON TRACK</div><div class="kn2">Verified by Buck</div></div>
       </div>
 
@@ -296,27 +300,27 @@ h1 em{font-style:normal;color:var(--red);}
       <div class="civ dec">
         <div class="civ-h">
           <div class="detailbub"><div class="a">CIV</div><div class="b">02</div></div>
-          <div class="civ-t">Swale Tree-Clearing Scope</div>
-          <span class="sbadge dec">Needs Decision</span>
+          <div class="civ-t">Tree Easements</div>
+          <span class="sbadge dec">Pending Discussion</span>
         </div>
         <div class="civ-body">
-          <div class="crow"><div class="cl">Position</div><div class="cv">Clearing scope sent to DooleyMack. Contract reportedly carries no allowance for the work; no price or authorization documented.</div></div>
-          <div class="crow"><div class="cl">Impact</div><div class="cv">Unpriced work could create avoidable scope / change exposure, or delay clearing needed for site progress.</div></div>
-          <div class="crow"><div class="cl">Needed in meeting</div><div class="cv">Establish clearing limits, contract responsibility, price, approval authority, and the date written authorization is required.</div></div>
-          <div class="crow"><div class="cl">Ball in court</div><div class="cv">DooleyMack for scope &amp; pricing; responsibility to be established in meeting.</div></div>
-          <div class="crow"><div class="cl">Next step</div><div class="cv">Submit the defined scope and price for written approval before clearing begins.</div></div>
+          <div class="crow"><div class="cl">Position</div><div class="cv">The tree-easement scope of work has been provided to DooleyMack. Discussion between Gavin Melia and Jeff Boyer is pending.</div></div>
+          <div class="crow"><div class="cl">Impact</div><div class="cv">Unresolved responsibility or authorization could create avoidable scope / change exposure or affect the timing of tree work.</div></div>
+          <div class="crow"><div class="cl">Needed in meeting</div><div class="cv">Confirm the tree-easement limits, contract responsibility, pricing / authorization path, and required timing.</div></div>
+          <div class="crow"><div class="cl">Ball in court</div><div class="cv">Gavin Melia &amp; Jeff Boyer</div></div>
+          <div class="crow"><div class="cl">Next step</div><div class="cv">Complete the owner / GC discussion and issue written direction before affected tree work proceeds.</div></div>
         </div>
       </div>
 
-      <div class="civ risk">
+      <div class="civ info">
         <div class="civ-h">
           <div class="detailbub"><div class="a">CIV</div><div class="b">03</div></div>
           <div class="civ-t">Duke Energy Service Path</div>
-          <span class="sbadge risk">At Risk</span>
+          <span class="sbadge ok">On Track</span>
         </div>
         <div class="civ-body">
-          <div class="crow"><div class="cl">Position</div><div class="cv">Bill Bartlett met with Duke Energy, which is mobilizing to trim trees in the off-property power-line path. Robert E. Wild is the documented Duke contact.</div></div>
-          <div class="crow"><div class="cl">Impact</div><div class="cv">Incomplete vegetation clearing or service-path coordination could affect the permanent-power milestone and downstream commissioning.</div></div>
+          <div class="crow"><div class="cl">Position</div><div class="cv">The Duke Energy service path is not at risk. Bill Bartlett met with Duke Energy, which is mobilizing to trim trees in the off-property power-line path. Robert E. Wild is the documented Duke contact.</div></div>
+          <div class="crow"><div class="cl">Status</div><div class="cv">No current schedule risk is identified; continued coordination supports the 12/18/26 permanent-power milestone.</div></div>
           <div class="crow"><div class="cl">Needed in meeting</div><div class="cv">Confirm Duke's planned trimming clears the full required path; obtain the remaining utility sequence and commitment dates.</div></div>
           <div class="crow"><div class="cl">Ball in court</div><div class="cv">William “Bill” Bartlett &amp; Duke Energy</div></div>
           <div class="crow"><div class="cl">Next step</div><div class="cv">Document Duke's trimming and service schedule; track against permanent power.</div></div>
@@ -329,16 +333,17 @@ h1 em{font-style:normal;color:var(--red);}
           <div class="rnote"><div class="rlv ok">On Track</div><div class="rd">Overall project remains on schedule — verified by Buck.</div></div>
           <div class="rnote"><div class="rlv ok">On Track</div><div class="rd">Building Pad Certification complete against the 09/09 milestone; Foundations reported ~2 days ahead as of 09/03.</div></div>
           <div class="rnote"><div class="rlv risk">At Risk</div><div class="rd">Documented civil disposition still required for the heritage-oak / pond-grading conflict (CIV-01).</div></div>
-          <div class="rnote"><div class="rlv dec">Needs Decision</div><div class="rd">Scope, pricing, and authorization must be established for swale tree clearing (CIV-02).</div></div>
+          <div class="rnote"><div class="rlv dec">Pending</div><div class="rd">Tree-easement scope is with DooleyMack; discussion between Gavin Melia and Jeff Boyer remains pending (CIV-02).</div></div>
+          <div class="rnote"><div class="rlv ok">On Track</div><div class="rd">Duke Energy service-path coordination remains active and is not at risk (CIV-03).</div></div>
         </div>
 
         <div class="pane">
           <div class="ph2"><span class="dot">03</span>Changes Since Last Meeting</div>
           <ul class="clist">
-            <li>Building Pad Certification now complete; exact actual completion date <span class="ph">[not provided]</span>.</li>
-            <li>Week-ending 09/04 update: building-pad fill installed in lifts and compacted.</li>
-            <li>Next planned activities: building layout, footing work, underslab plumbing, underslab electrical.</li>
-            <li>Pad testing and WWF installation controls closed — no additional pad-remediation cost identified.</li>
+            <li>Building Pad Certification complete; pad testing and WWF controls closed with no additional remediation cost identified.</li>
+            <li>Week-ending 09/04: building-pad fill installed and compacted; layout, footings, and underslab MEP planned next.</li>
+            <li>Tree-easement scope provided to DooleyMack; Gavin Melia / Jeff Boyer discussion pending.</li>
+            <li>Duke Energy service path confirmed not at risk; coordination continues.</li>
           </ul>
         </div>
       </div>
@@ -349,20 +354,20 @@ h1 em{font-style:normal;color:var(--red);}
           <div class="rev"><div class="revtri g"><span>1</span></div><div><div class="rvt">Building Pad Certification</div><div class="rvx">09/09/26 · complete · [actual date TBD]</div></div><div class="rvs ok">On Track</div></div>
           <div class="rev"><div class="revtri g"><span>2</span></div><div><div class="rvt">Foundations Complete</div><div class="rvx">09/15/26 · ~2 days ahead as of 09/03</div></div><div class="rvs ok">On Track</div></div>
           <div class="rev"><div class="revtri"><span>3</span></div><div><div class="rvt">Floor Slab Complete</div><div class="rvx">10/07/26 · [current forecast TBD]</div></div><div class="rvs tbd">Forecast</div></div>
-          <div class="rev"><div class="revtri"><span>4</span></div><div><div class="rvt">Permanent Power</div><div class="rvx">12/18/26 · date at risk pending CIV-03</div></div><div class="rvs risk">At Risk</div></div>
+          <div class="rev"><div class="revtri g"><span>4</span></div><div><div class="rvt">Permanent Power</div><div class="rvx">12/18/26 · service-path coordination active</div></div><div class="rvs ok">On Track</div></div>
         </div>
 
         <div class="pane">
           <div class="ph2"><span class="dot">05</span>Meeting Outcomes Needed</div>
           <div class="oc"><div class="hex">1</div><div class="ot2">Written direction, responsible party, and commitment date for <b>CIV-01</b>.</div></div>
-          <div class="oc"><div class="hex">2</div><div class="ot2">Defined scope, price-delivery date, responsibility, and authorization path for <b>CIV-02</b>.</div></div>
-          <div class="oc"><div class="hex">3</div><div class="ot2">Confirmed Duke Energy work sequence and milestone protection plan for <b>CIV-03</b>.</div></div>
+          <div class="oc"><div class="hex">2</div><div class="ot2">Owner / GC resolution of responsibility, pricing, authorization, and timing for <b>CIV-02</b>.</div></div>
+          <div class="oc"><div class="hex">3</div><div class="ot2">Confirm the ongoing Duke Energy trimming and service sequence for <b>CIV-03</b>.</div></div>
         </div>
       </div>
 
       <div class="titleblock">
         <div class="tb-l">
-          <div class="tbmeta">Weekly coordination brief &nbsp;·&nbsp; Current through 09/04/26</div>
+          <div class="tbmeta">Weekly coordination brief &nbsp;·&nbsp; Current through 09/07/26</div>
         </div>
         <div class="tb-r">
           <div><div class="sn-lab">Sheet</div><div class="sn">CB-01</div></div>
