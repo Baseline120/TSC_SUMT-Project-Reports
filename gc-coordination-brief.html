@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TSC Sumter — GC Coordination Brief</title>
+
+
+
+<style>
+:root{
+  --sheet:#fbfbf9; --grid:#e4e9ef; --ink:#1c2b3a; --line:#25405c;
+  --blue:#1f6fb2; --blueL:#e8f1f9; --red:#c0392b; --sub:#5a6b7d; --green:#2c7a52; --amber:#b0781a;
+  --sans:'Archivo',system-ui,sans-serif; --narrow:'Archivo Narrow',system-ui,sans-serif;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:#aeb8c2;color:var(--ink);font-family:var(--sans);}
+body{min-height:100vh;padding:24px 16px;}
+.sheet{max-width:1240px;margin:0 auto;background:var(--sheet);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:26px 26px;position:relative;box-shadow:0 20px 50px rgba(30,45,60,.4);
+  border:1px solid var(--line);}
+.frame{border:2.5px solid var(--line);margin:12px;position:relative;padding:0;}
+.frame::before{content:"";position:absolute;inset:6px;border:1px solid var(--line);pointer-events:none;}
+.inner{padding:26px 30px;}
+@media(max-width:720px){.inner{padding:20px;}}
+
+.bubbles{display:flex;justify-content:space-between;margin-bottom:8px;}
+.bub{width:26px;height:26px;border:1.5px solid var(--line);border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-family:var(--narrow);font-weight:700;font-size:12px;color:var(--sub);background:var(--sheet);}
+
+.tstrip{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:16px;
+  border-bottom:2.5px solid var(--line);padding-bottom:14px;}
+.disc{font-family:var(--narrow);font-weight:700;font-size:12px;letter-spacing:.22em;color:var(--blue);text-transform:uppercase;}
+h1{font-family:var(--sans);font-weight:700;font-size:42px;letter-spacing:-.01em;margin:4px 0 4px;line-height:1;}
+h1 em{font-style:normal;color:var(--red);}
+.meta{font-family:var(--narrow);font-size:13.5px;color:var(--sub);letter-spacing:.02em;}
+.northbox{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.north{width:44px;height:44px;}
+.northlab{font-family:var(--narrow);font-weight:700;font-size:11px;letter-spacing:.16em;color:var(--sub);}
+
+.objbar{display:flex;gap:12px;align-items:baseline;border-left:4px solid var(--blue);background:var(--blueL);
+  padding:10px 14px;margin:14px 0 2px;}
+.objbar .ol{font-family:var(--narrow);font-weight:700;font-size:11px;letter-spacing:.14em;color:var(--blue);text-transform:uppercase;white-space:nowrap;}
+.objbar .ot{font-size:13px;color:var(--ink);line-height:1.4;}
+
+.keynotes{display:grid;grid-template-columns:repeat(6,1fr);border:1.5px solid var(--line);margin:16px 0 6px;}
+.kn{padding:12px 12px 11px;border-right:1.5px solid var(--line);position:relative;}
+.kn:last-child{border-right:none;}
+.kn .tick{position:absolute;top:-9px;left:10px;width:16px;height:16px;border:1.5px solid var(--line);border-radius:50%;
+  background:var(--sheet);font-family:var(--narrow);font-weight:700;font-size:9px;display:flex;align-items:center;justify-content:center;color:var(--blue);}
+.kn .kl{font-family:var(--narrow);font-weight:600;font-size:10.5px;letter-spacing:.1em;color:var(--sub);text-transform:uppercase;margin-top:6px;}
+.kn .kv{font-family:var(--sans);font-weight:700;font-size:19px;letter-spacing:-.01em;margin-top:3px;}
+.kn .kv.g{color:var(--green);} .kn .kv.r{color:var(--red);} .kn .kv.a{color:var(--amber);}
+.kn .kn2{font-size:11px;color:var(--sub);line-height:1.3;margin-top:3px;}
+@media(max-width:900px){.keynotes{grid-template-columns:repeat(2,1fr);}.kn{border-bottom:1.5px solid var(--line);}}
+
+/* section header used inside/above panes */
+.dech{font-family:var(--narrow);font-weight:700;font-size:14px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink);display:flex;align-items:center;gap:10px;margin:22px 0 10px;}
+.dech .dot{font-family:var(--sans);font-size:11px;color:var(--blue);border:1.5px solid var(--blue);border-radius:3px;padding:1px 6px;}
+.dech .ln{flex:1;height:1.5px;background:var(--line);}
+
+/* CIV detail blocks */
+.civ{border:1.5px solid var(--line);margin-bottom:14px;background:var(--sheet);}
+.civ.risk{border-left:5px solid var(--red);}
+.civ.dec{border-left:5px solid var(--amber);}
+.civ-h{display:flex;align-items:center;gap:12px;background:var(--blueL);border-bottom:1.5px solid var(--line);padding:9px 14px;}
+.detailbub{flex:none;width:40px;height:40px;border:1.5px solid var(--line);border-radius:50%;background:var(--sheet);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;}
+.detailbub .a{font-family:var(--narrow);font-weight:700;font-size:9px;letter-spacing:.08em;color:var(--blue);border-bottom:1px solid var(--line);padding-bottom:1px;width:26px;text-align:center;}
+.detailbub .b{font-family:var(--sans);font-weight:700;font-size:13px;color:var(--ink);padding-top:1px;}
+.civ-t{flex:1;font-family:var(--sans);font-weight:700;font-size:15.5px;}
+.sbadge{font-family:var(--narrow);font-weight:700;font-size:10px;letter-spacing:.1em;padding:4px 9px;border-radius:2px;text-transform:uppercase;white-space:nowrap;}
+.sbadge.risk{background:var(--red);color:#fff;}
+.sbadge.dec{background:#f0d27a;color:#5a4600;}
+.civ-body{padding:10px 14px 12px;}
+.crow{display:grid;grid-template-columns:132px 1fr;gap:10px;padding:6px 0;border-bottom:1px dashed var(--grid);}
+.crow:last-child{border-bottom:none;}
+.crow .cl{font-family:var(--narrow);font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);padding-top:2px;}
+.crow .cv{font-size:13px;color:var(--ink);line-height:1.45;}
+.crow .cv b{color:var(--ink);}
+.ph{color:var(--red);font-weight:600;}
+@media(max-width:560px){.crow{grid-template-columns:1fr;gap:2px;}}
+
+.plan{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1.5px solid var(--line);}
+@media(max-width:860px){.plan{grid-template-columns:1fr;}}
+.pane{padding:16px 20px;border-right:1.5px solid var(--line);}
+.pane:last-child{border-right:none;}
+.pane .ph2{font-family:var(--narrow);font-weight:700;font-size:13px;letter-spacing:.1em;text-transform:uppercase;
+  display:flex;align-items:center;gap:9px;margin-bottom:8px;}
+.pane .ph2 .dot{font-family:var(--sans);font-size:10.5px;color:var(--blue);border:1.5px solid var(--blue);border-radius:3px;padding:1px 6px;}
+
+.rnote{display:grid;grid-template-columns:96px 1fr;gap:12px;padding:10px 0;border-bottom:1px solid var(--grid);}
+.rnote:last-child{border-bottom:none;}
+.rlv{font-family:var(--narrow);font-weight:700;font-size:10px;letter-spacing:.06em;padding-top:2px;text-transform:uppercase;}
+.rlv.ok{color:var(--green);} .rlv.risk{color:var(--red);} .rlv.dec{color:var(--amber);}
+.rnote .rd{font-size:12.5px;color:var(--ink);line-height:1.45;}
+
+.clist{list-style:none;margin:0;padding:0;}
+.clist li{position:relative;padding:8px 0 8px 20px;border-bottom:1px solid var(--grid);font-size:12.5px;color:var(--ink);line-height:1.45;}
+.clist li:last-child{border-bottom:none;}
+.clist li::before{content:"";position:absolute;left:2px;top:14px;width:7px;height:7px;background:var(--blue);transform:rotate(45deg);}
+
+.rev{padding:9px 0;border-bottom:1px solid var(--grid);display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;}
+.rev:last-child{border-bottom:none;}
+.revtri{width:0;height:0;border-left:9px solid transparent;border-right:9px solid transparent;border-bottom:15px solid var(--red);position:relative;}
+.revtri.g{border-bottom-color:var(--green);}
+.revtri span{position:absolute;top:2px;left:-4px;width:8px;text-align:center;font-family:var(--narrow);font-weight:700;font-size:8px;color:#fff;}
+.rev .rvt{font-family:var(--sans);font-weight:600;font-size:13.5px;}
+.rev .rvx{font-family:var(--narrow);font-size:11.5px;color:var(--sub);line-height:1.35;margin-top:1px;}
+.rev .rvs{font-family:var(--narrow);font-weight:700;font-size:10px;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;text-align:right;}
+.rvs.ok{color:var(--green);} .rvs.risk{color:var(--red);} .rvs.tbd{color:var(--sub);}
+
+.outcomes{border:1.5px solid var(--line);border-top:none;padding:16px 20px;}
+.oc{display:grid;grid-template-columns:auto 1fr;gap:14px;padding:9px 0;border-bottom:1px solid var(--grid);}
+.oc:last-child{border-bottom:none;}
+.hex{flex:none;width:24px;height:24px;background:var(--blue);color:#fff;font-family:var(--narrow);font-weight:700;font-size:13px;
+  display:flex;align-items:center;justify-content:center;clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);}
+.oc .ot2{font-size:13px;color:var(--ink);line-height:1.45;}
+
+.titleblock{display:grid;grid-template-columns:1fr 190px;border:1.5px solid var(--line);border-top:none;}
+.tb-l{padding:14px 18px;border-right:1.5px solid var(--line);display:flex;flex-direction:column;justify-content:center;gap:3px;}
+.tb-l .firm{font-family:var(--sans);font-weight:700;font-size:16px;letter-spacing:.02em;}
+.tb-l .firm span{color:var(--red);}
+.tb-l .tbmeta{font-family:var(--narrow);font-size:12px;color:var(--sub);}
+.tb-r{padding:12px 16px;display:flex;flex-direction:column;justify-content:space-between;}
+.tb-r .sn-lab{font-family:var(--narrow);font-weight:600;font-size:10px;letter-spacing:.14em;color:var(--sub);text-transform:uppercase;}
+.tb-r .sn{font-family:var(--sans);font-weight:700;font-size:28px;color:var(--blue);letter-spacing:.02em;}
+.tb-r .tbnote{font-family:var(--narrow);font-size:11px;color:var(--sub);}
+
+@page{ size: letter landscape; margin:0.35in; }
+@media print{
+  html,body{background:#fff!important;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .sheet{max-width:none;width:100%;box-shadow:none;border:none;}
+  .frame{margin:0;border-width:2px;}
+  .frame::before{inset:5px;}
+  .inner{padding:14px 18px;}
+  h1{font-size:34px;}
+  /* keep each section header attached to what follows it */
+  .dech,.ph2,.civ-h,.objbar{break-after:avoid;}
+  /* never split these units across a page */
+  .keynotes,.kn,.objbar,.civ,.civ-body,.plan,.pane,.rnote,.rev,.oc,.clist li,.titleblock{break-inside:avoid;}
+  /* tighten spacing a touch for print density */
+  .keynotes{margin:12px 0 4px;}
+  .dech{margin:14px 0 8px;}
+  .civ{margin-bottom:10px;}
+}
+
+/* Self-contained fonts and print layout: Letter portrait, two pages. */
+:root{--sans:Arial,Helvetica,sans-serif;--narrow:Arial,Helvetica,sans-serif;}
+@page{size:letter portrait;margin:.5in .5in .55in;}
+@media print{
+ html,body{background:white!important;color:#172635;min-height:0;padding:0;margin:0;}
+ .sheet{background:#fff!important;border:0;box-shadow:none;width:100%;max-width:none;}
+ .frame{border:0;margin:0;} .frame::before,.northbox{display:none;}
+ .inner{padding:0;}
+ .tstrip{display:block;padding-bottom:10px;border-bottom:2px solid #25405c;}
+ .disc{font-size:9pt;letter-spacing:.15em;} h1{font-size:27pt;line-height:1.1;margin:5px 0;}
+ .meta{font-size:9pt;line-height:1.4;}
+ .objbar{margin:12px 0;padding:9px 11px;gap:10px;background:#f3f6f8;}
+ .objbar .ol{font-size:8pt;} .objbar .ot{font-size:10pt;line-height:1.4;}
+ .keynotes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:16px 0 12px;}
+ .kn{padding:10px 10px 9px;border:0;border-right:1px solid #bac4ce;border-bottom:1px solid #bac4ce;}
+ .kn:nth-child(3n){border-right:0;} .kn:nth-child(n+4){border-bottom:0;}
+ .kn .tick{display:none;} .kn .kl{font-size:8pt;letter-spacing:.04em;margin:0;}
+ .kn .kv{font-size:13pt;margin-top:4px;} .kn .kn2{font-size:8pt;line-height:1.35;}
+ .dech{font-size:10pt;margin:14px 0 9px;}
+ .civ{margin:0 0 14px;background:white;break-inside:avoid;}
+ .civ-h{padding:8px 10px;background:#f3f6f8;gap:10px;}
+ .detailbub{width:33px;height:33px;} .detailbub .a{font-size:7pt;} .detailbub .b{font-size:10pt;}
+ .civ-t{font-size:12pt;} .sbadge{font-size:7.5pt;letter-spacing:.04em;}
+ .sbadge.risk{background:white;color:#9b2c20;border:1px solid #9b2c20;}
+ .sbadge.dec{background:white;color:#785010;border:1px solid #785010;}
+ .civ-body{padding:5px 11px 8px;}
+ .crow{grid-template-columns:104px minmax(0,1fr);padding:7px 0;gap:10px;border-color:#cbd2d9;}
+ .crow .cl{font-size:8pt;letter-spacing:.03em;line-height:1.4;}
+ .crow .cv{font-size:10pt;line-height:1.42;}
+ .civ + .civ.dec{break-before:page;}
+ .plan{display:grid;grid-template-columns:1fr 1fr;break-inside:avoid;}
+ .civ + .plan{break-before:page;}
+ .pane{padding:12px 13px;min-width:0;}
+ .pane .ph2{font-size:9pt;letter-spacing:.03em;line-height:1.35;align-items:flex-start;}
+ .rnote{grid-template-columns:1fr;gap:3px;padding:9px 0;}
+ .rlv{font-size:8pt;} .rnote .rd,.clist li,.oc .ot2{font-size:10pt;line-height:1.4;}
+ .clist li{padding:9px 0 9px 13px;} .clist li::before{width:5px;height:5px;left:0;}
+ .rev{grid-template-columns:18px 1fr;gap:5px 7px;padding:9px 0;}
+ .rev .rvt{font-size:10pt;} .rev .rvx{font-size:9pt;line-height:1.35;}
+ .rev .rvs{grid-column:2;text-align:left;font-size:8pt;}
+ .oc{gap:8px;padding:10px 0;} .hex{width:21px;height:21px;font-size:10pt;}
+ .titleblock{grid-template-columns:1fr 170px;break-inside:avoid;}
+ .tb-l{padding:10px 13px;} .tb-r{padding:10px 13px;}
+ .tb-r .sn{font-size:20pt;} .tb-l .tbmeta,.tb-r .tbnote{font-size:8pt;line-height:1.35;}
+ .dech,.ph2,.civ-h{break-after:avoid;} p,li{orphans:3;widows:3;}
+}
+
+@page{margin:.4in .45in .45in;}
+@media print{
+ .civ + .civ.dec,.civ + .plan{break-before:auto;}
+ .civ.dec + .civ{break-before:page;}
+ .tstrip{padding-bottom:7px;} h1{font-size:24pt;margin:3px 0;}
+ .objbar{margin:8px 0;padding:7px 10px;}
+ .keynotes{margin:10px 0 8px;}
+ .kn{padding:7px 9px;} .kn .kv{font-size:12pt;}
+ .dech{margin:10px 0 7px;}
+ .civ{margin-bottom:10px;}
+ .civ-h{padding:6px 9px;} .detailbub{width:29px;height:29px;}
+ .civ-body{padding:3px 10px 5px;}
+ .crow{padding:7px 0;grid-template-columns:104px minmax(0,1fr);}
+ .crow .cv{font-size:10pt;line-height:1.38;}
+ .pane{padding:8px 11px;}
+ .pane .ph2{margin-bottom:5px;font-size:8.5pt;}
+ .rnote{padding:5px 0;gap:2px;}
+ .rnote .rd,.clist li,.oc .ot2{font-size:9.5pt;line-height:1.35;}
+ .clist li{padding:6px 0 6px 12px;}
+ .rev{padding:5px 0;gap:3px 6px;}
+ .rev .rvt{font-size:9pt;} .rev .rvx{font-size:8pt;}
+ .rev .rvs{font-size:7pt;}
+ .oc{padding:6px 0;} .tb-l,.tb-r{padding:7px 11px;}
+ .tb-r .sn{font-size:17pt;}
+}
+
+:root{--sans:Arial,Helvetica,sans-serif;--narrow:'Arial Narrow',Arial,sans-serif;}
+@media print{
+ html,body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+ .sheet{background-color:var(--sheet)!important;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px)!important;background-size:26px 26px!important;}
+ .frame::before{display:block;position:fixed;inset:0;border:4px double var(--line);pointer-events:none;}
+ .inner{padding:12px;} .civ.dec + .civ{margin-top:12px;} .tstrip{position:relative;padding-right:55px;}
+ .northbox{display:flex;position:absolute;right:5px;top:0;gap:2px;}
+ .north{width:36px;height:36px;}.northlab{font-size:8pt;}
+ .objbar,.civ-h{background:var(--blueL);}
+ .keynotes,.civ,.titleblock{background:var(--sheet);}
+ .kn{padding-top:10px;}
+ .kn .tick{display:flex;width:14px;height:14px;top:-7px;font-size:7pt;}
+ .kn:nth-child(n+4) .tick{top:2px;left:auto;right:4px;}
+ .sbadge.risk{background:var(--red);color:white;border:0;}
+ .sbadge.dec{background:#f0d27a;color:#5a4600;border:0;}
+ .plan{background:rgba(251,251,249,.94);}
+ .civ-h{border-bottom-color:var(--line);}
+}
+
+</style>
+<style>
+@media print{
+ .crow{padding:5px 0;}.crow .cv{font-size:9.5pt;line-height:1.32;}
+ .crow .cl{font-size:8pt;}
+ .rnote .rd,.clist li,.oc .ot2{font-size:9pt;line-height:1.3;}
+ .rnote{padding:4px 0;}.clist li{padding-top:5px;padding-bottom:5px;}
+ .rev{padding:4px 0;}.oc{padding:5px 0;}
+ .keynotes{margin-top:10px;} .kn{padding-bottom:6px;}
+ .meta{font-size:8.5pt;} .objbar .ot{font-size:9pt;}
+ .pane .ph2{font-size:9pt;}
+}
+</style></head>
+<body><div class="sheet"><div class="frame"><div class="inner">
+<div class="tstrip"><div><div class="disc">GC Coordination Brief</div><h1>TSC <em>Sumter</em></h1>
+<div class="meta">Tractor Supply — Sumter, SC &nbsp;|&nbsp; 28 Pack Rd., Sumter, SC 29150</div>
+<div class="meta">Report date: September 6, 2026 &nbsp;|&nbsp; Information current through September 4, 2026</div></div>
+<div class="northbox"><svg class="north" viewBox="0 0 44 44"><circle cx="22" cy="22" r="20" fill="none" stroke="#25405c" stroke-width="1.5"/><polygon points="22,5 27,24 22,20 17,24" fill="#c0392b"/><polygon points="22,20 27,24 22,39 17,24" fill="#1c2b3a"/></svg><div class="northlab">N</div></div></div>
+<div class="objbar"><div class="ol">Phase</div><div class="ot">Construction — building-pad operations transitioning to layout, footings, and underslab MEP</div></div>
+<div class="keynotes"><div class="kn"><div class="tick">1</div><div class="kl">Pad certification</div><div class="kv g">COMPLETE</div><div class="kn2">Baseline 09/09/26 · actual date not provided</div></div><div class="kn"><div class="tick">2</div><div class="kl">Next milestone</div><div class="kv g">FOUNDATIONS</div><div class="kn2">Complete — 09/15/26</div></div><div class="kn"><div class="tick">3</div><div class="kl">Floor slab</div><div class="kv ">10/07/26</div><div class="kn2">Current forecast not documented</div></div><div class="kn"><div class="tick">4</div><div class="kl">Permanent power</div><div class="kv r">12/18/26</div><div class="kn2">At risk · JOB-03</div></div><div class="kn"><div class="tick">5</div><div class="kl">Turn Over</div><div class="kv g">02/12/27</div><div class="kn2">Baseline and current forecast</div></div><div class="kn"><div class="tick">6</div><div class="kl">Overall</div><div class="kv g">ON TRACK</div><div class="kn2">Verified by Buck</div></div></div><div class="dech"><span class="dot">01</span>Priority Items<span class="ln"></span></div><div class="civ risk"><div class="civ-h"><div class="detailbub"><div class="a">JOB</div><div class="b">01</div></div><div class="civ-t">Heritage Oak and Pond Grading</div><span class="sbadge risk">AT RISK</span></div><div class="civ-body"><div class="crow"><div class="cl">Current Position</div><div class="cv">An approximately 48-inch heritage oak near the pond may have a reported 45-foot root zone extending into grading or pond work. The tree appears outside the pond limits, but the conflict remains under civil review. Exact drawing and RFI references are not established in the current brief record.</div></div><div class="crow"><div class="cl">Impact</div><div class="cv">Potential grading or pond redesign, City heritage-tree review, construction delay, and unquantified mitigation cost.</div></div><div class="crow"><div class="cl">Required Action or Decision</div><div class="cv">Confirm the surveyed trunk and root limits against the current design, issue the recommended civil disposition, and identify any required City approval path.</div></div><div class="crow"><div class="cl">Ball in Court</div><div class="cv">Mike Nichols and Joey Purvis.</div></div><div class="crow"><div class="cl">Due Date</div><div class="cv">Date must be established.</div></div><div class="crow"><div class="cl">Next Step</div><div class="cv">Issue written direction before affected grading or any removal decision.</div></div></div></div><div class="civ dec"><div class="civ-h"><div class="detailbub"><div class="a">JOB</div><div class="b">02</div></div><div class="civ-t">Swale Tree-Clearing Scope</div><span class="sbadge dec">NEEDS DECISION</span></div><div class="civ-body"><div class="crow"><div class="cl">Current Position</div><div class="cv">The clearing scope was sent to DooleyMack. The contract reportedly contains no allowance for the work, and no price or authorization is documented.</div></div><div class="crow"><div class="cl">Impact</div><div class="cv">Unpriced work could create avoidable scope and change exposure or delay clearing needed for site progress.</div></div><div class="crow"><div class="cl">Required Action or Decision</div><div class="cv">Define the clearing limits, establish contract responsibility, obtain pricing, and identify the approval authority.</div></div><div class="crow"><div class="cl">Ball in Court</div><div class="cv">DooleyMack for scope and pricing; responsibility must be established.</div></div><div class="crow"><div class="cl">Due Date</div><div class="cv">Date must be established.</div></div><div class="crow"><div class="cl">Next Step</div><div class="cv">Submit the defined scope and price for written approval before clearing begins.</div></div></div></div><div class="civ risk"><div class="civ-h"><div class="detailbub"><div class="a">JOB</div><div class="b">03</div></div><div class="civ-t">Duke Energy Service Path</div><span class="sbadge risk">AT RISK</span></div><div class="civ-body"><div class="crow"><div class="cl">Current Position</div><div class="cv">William “Bill” Bartlett met with Duke Energy, which is mobilizing to trim trees in the off-property power-line path. Robert E Wild is the documented Duke Energy contact.</div></div><div class="crow"><div class="cl">Impact</div><div class="cv">Incomplete vegetation clearing or service-path coordination could affect permanent power and downstream commissioning work.</div></div><div class="crow"><div class="cl">Required Action or Decision</div><div class="cv">Confirm that Duke&#x27;s planned trimming clears the required path and document the remaining utility work sequence.</div></div><div class="crow"><div class="cl">Ball in Court</div><div class="cv">William “Bill” Bartlett and Duke Energy.</div></div><div class="crow"><div class="cl">Due Date</div><div class="cv">December 18, 2026.</div></div><div class="crow"><div class="cl">Next Step</div><div class="cv">Record Duke&#x27;s trimming and service commitments and track them against permanent power.</div></div></div></div><div class="plan"><div class="pane"><div class="ph2"><span class="dot">02</span>Executive Snapshot</div><div class="rnote"><div class="rlv ok">ON TRACK</div><div class="rd">Buck verified the overall project remains on schedule.</div></div><div class="rnote"><div class="rlv ok">ON TRACK</div><div class="rd">Building Pad Certification is complete, and Foundations Complete was reported approximately two days ahead as of September 3.</div></div><div class="rnote"><div class="rlv risk">AT RISK</div><div class="rd">A written civil disposition is still required under JOB-01 before affected grading proceeds.</div></div><div class="rnote"><div class="rlv dec">NEEDS DECISION</div><div class="rd">Scope, pricing, responsibility, and authorization remain unresolved under JOB-02.</div></div></div><div class="pane"><div class="ph2"><span class="dot">03</span>Changes Since the Previous Update</div><ul class="clist"><li>Building Pad Certification is complete against the September 9 scheduled milestone; the exact actual completion date was not provided.</li><li>The week-ending September 4 update reports building-pad fill installed in lifts and compacted.</li><li>Building layout, footings, underslab plumbing, and underslab electrical are planned next.</li><li>Pad testing and WWF installation controls are closed, with no additional pad-remediation cost identified.</li></ul></div></div><div class="plan" style="border-top:none"><div class="pane"><div class="ph2"><span class="dot">04</span>Key Milestones</div><div class="rev"><div class="revtri g"><span>1</span></div><div><div class="rvt">Building Pad Certification</div><div class="rvx">Baseline: 09/09/26 · Completed; exact actual date not provided</div></div><div class="rvs ok">ON TRACK</div></div><div class="rev"><div class="revtri g"><span>2</span></div><div><div class="rvt">Foundations Complete</div><div class="rvx">Baseline: 09/15/26 · Reported approximately two days ahead as of 09/03</div></div><div class="rvs ok">ON TRACK</div></div><div class="rev"><div class="revtri "><span>3</span></div><div><div class="rvt">Floor Slab Complete</div><div class="rvx">Baseline: 10/07/26 · Current forecast not separately documented</div></div><div class="rvs tbd">FORECAST NOT DOCUMENTED</div></div><div class="rev"><div class="revtri "><span>4</span></div><div><div class="rvt">Permanent Power</div><div class="rvx">12/18/26 · Date at risk pending JOB-03</div></div><div class="rvs risk">AT RISK</div></div><div class="rev"><div class="revtri g"><span>5</span></div><div><div class="rvt">Turn Over</div><div class="rvx">Baseline: 02/12/27 · Current forecast: 02/12/27</div></div><div class="rvs ok">ON TRACK</div></div></div><div class="pane"><div class="ph2"><span class="dot">05</span>Next-Period Priorities</div><div class="oc"><div class="hex">1</div><div class="ot2">Written civil disposition from Mike Nichols and Joey Purvis — Due date must be established — JOB-01.</div></div><div class="oc"><div class="hex">2</div><div class="ot2">Defined clearing scope and price from DooleyMack, with responsibility and approval path established — Due date must be established — JOB-02.</div></div><div class="oc"><div class="hex">3</div><div class="ot2">Documented Duke Energy trimming and service sequence from Bill Bartlett and Duke Energy — Due December 18, 2026 — JOB-03.</div></div></div></div><div class="titleblock"><div class="tb-l"><div class="tbmeta">GC coordination brief · Report: 09/06/26<br>Information current through 09/04/26</div></div><div class="tb-r"><div><div class="sn-lab">Sheet</div><div class="sn">GC-01</div></div><div class="tbnote">Coordination only — not for construction</div></div></div></div></div></div></body></html>

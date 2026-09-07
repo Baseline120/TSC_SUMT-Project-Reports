@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Construction Status Dashboard Template</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Roboto+Slab:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #eef2f5;
+    --paper: #ffffff;
+    --ink: #14202b;
+    --ink-2: #2e3b45;
+    --ink-3: #5c6873;
+    --ink-4: #9aa5ae;
+    --rule: #d9e1e8;
+    --rule-2: #e8edf2;
+    --positive: #1f7a4d;
+    --warning: #b97316;
+    --alert: #c62828;
+    --metric-bg: #0f5e9c;
+    --metric-top: #14344d;
+    --metric-accent: #f2a23a;
+    --accent: #0060a9;
+    --accent-ink: #004a80;
+    --accent-wash: #e4eff8;
+    --accent-2: #e4002b;
+  }
+
+  body[data-theme="sherwin"] {
+    --accent: #0060a9;
+    --accent-ink: #004a80;
+    --accent-wash: #e4eff8;
+    --accent-2: #e4002b;
+    --metric-bg: #0060a9;
+    --metric-top: #24465d;
+    --metric-accent: #f2a23a;
+  }
+
+  body[data-theme="tractor-supply"] {
+    --accent: #d71920;
+    --accent-ink: #111111;
+    --accent-wash: #fff1f1;
+    --accent-2: #000000;
+    --metric-bg: #b5121b;
+    --metric-top: #111111;
+    --metric-accent: #fff4ec;
+  }
+
+  body[data-theme="tractor-supply"] h1 {
+    font-family: 'Roboto Slab', serif;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  body[data-theme="tractor-supply"] .brand-sub {
+    color: #5a7593;
+  }
+
+  body[data-theme="tractor-supply"] .brand-mark,
+  body[data-theme="tractor-supply"] .footer-brand .mk {
+    border-color: #111111;
+  }
+
+  body[data-theme="tractor-supply"] .brand-mark::before,
+  body[data-theme="tractor-supply"] .footer-brand .mk::before {
+    background: #111111;
+  }
+
+  body[data-theme="tractor-supply"] .brand-name {
+    color: #20344d;
+  }
+
+  body[data-theme="tractor-supply"] .eyebrow .code,
+  body[data-theme="tractor-supply"] h1 em,
+  body[data-theme="tractor-supply"] .contact-role {
+    color: var(--accent);
+  }
+
+  body[data-theme="tractor-supply"] .status-pill {
+    border-color: rgba(215, 25, 32, 0.18);
+  }
+
+  body[data-theme="chipotle"] {
+    --accent: #a81612;
+    --accent-ink: #7e130f;
+    --accent-wash: #f8e4de;
+    --accent-2: #5b3225;
+    --metric-bg: #8f1d14;
+    --metric-top: #4a241a;
+    --metric-accent: #e3b151;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #e7ebef; }
+  body {
+    font-family: 'Inter', -apple-system, system-ui, sans-serif;
+    color: var(--ink);
+    font-size: 9pt;
+    line-height: 1.4;
+    -webkit-font-smoothing: antialiased;
+    padding: 28px 16px 48px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .page {
+    width: 8.5in;
+    min-height: 11in;
+    background: var(--paper);
+    padding: 0.36in 0.44in 0.28in;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.04), 0 20px 48px -24px rgba(20,32,43,0.25);
+  }
+
+  .topbar,
+  .title-block,
+  .section,
+  .footer {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand-mark {
+    width: 34px;
+    height: 34px;
+    border: 1.5px solid var(--ink);
+    display: grid;
+    place-items: center;
+    position: relative;
+  }
+  .brand-mark::before {
+    content: "";
+    position: absolute;
+    inset: 5px;
+    background: var(--ink);
+  }
+  .brand-mark::after {
+    content: "";
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: var(--paper);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+  .brand-name {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 14.5pt;
+    letter-spacing: -0.01em;
+  }
+  .brand-sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7pt;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-top: 2px;
+  }
+
+  .doc-meta {
+    text-align: right;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.5pt;
+    letter-spacing: 0.06em;
+    color: var(--ink-3);
+    line-height: 1.65;
+  }
+  .doc-meta strong { color: var(--ink); font-weight: 600; }
+
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 4px 10px;
+    background: var(--accent-wash);
+    color: var(--accent-ink);
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 2px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.15pt;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .status-pill .dot {
+    width: 7px;
+    height: 7px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+
+  .title-block {
+    padding: 17px 0 15px;
+    display: grid;
+    grid-template-columns: 1fr 150px;
+    align-items: center;
+    gap: 24px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8pt;
+    letter-spacing: 0.17em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 7px;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+  }
+  .eyebrow .bar { flex: 0 0 34px; height: 1px; background: var(--ink-4); }
+  .eyebrow .code { color: var(--accent); font-weight: 700; }
+  h1 {
+    margin: 0;
+    font-family: 'Fraunces', serif;
+    font-size: 27pt;
+    line-height: 1;
+    letter-spacing: -0.025em;
+    font-weight: 400;
+  }
+  h1 em { color: var(--accent); font-style: italic; }
+  .subtitle {
+    margin-top: 10px;
+    max-width: 485px;
+    color: var(--ink-2);
+    font-size: 10.5pt;
+    line-height: 1.32;
+  }
+  .title-side {
+    text-align: right;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.35pt;
+    color: var(--ink-3);
+    line-height: 1.55;
+  }
+  .title-side .val {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 10.35pt;
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .section { padding: 6px 0; border-bottom: 1px solid var(--rule); }
+  .section:last-of-type { border-bottom: 0; }
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 5px;
+  }
+  .section-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7pt;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    font-weight: 600;
+  }
+  .section-title {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 7.85pt;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .section-rule { flex: 1; height: 1px; background: var(--rule); }
+
+  .tiles {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    border: 1px solid var(--rule);
+    background: var(--rule);
+    column-gap: 1px;
+  }
+  .tile {
+    background: var(--paper);
+    padding: 7px 8px;
+    min-height: 54px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .tile-icon {
+    width: 13px;
+    height: 13px;
+    border: 1.25px solid var(--ink-2);
+    position: relative;
+  }
+  .tile[data-icon="tenant"] .tile-icon { border-radius: 50%; }
+  .tile[data-icon="tenant"] .tile-icon::after {
+    content: "";
+    position: absolute;
+    inset: 2px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+  .tile[data-icon="building"] .tile-icon::after {
+    content: "";
+    position: absolute;
+    left: 2px;
+    right: 2px;
+    bottom: 2px;
+    height: 3px;
+    background: var(--ink-2);
+  }
+  .tile[data-icon="delivery"] .tile-icon { border: none; }
+  .tile[data-icon="delivery"] .tile-icon::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 11px;
+    height: 1.25px;
+    background: var(--ink-2);
+    transform: translateY(-50%);
+  }
+  .tile[data-icon="delivery"] .tile-icon::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 50%;
+    width: 5px;
+    height: 5px;
+    border-top: 1.25px solid var(--ink-2);
+    border-right: 1.25px solid var(--ink-2);
+    transform: translateY(-50%) rotate(45deg);
+  }
+  .tile[data-icon="gc"] .tile-icon { transform: rotate(45deg); }
+  .tile[data-icon="location"] .tile-icon { border-radius: 50% 50% 50% 0; transform: rotate(-45deg); }
+  .tile-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 5.8pt;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .tile-val {
+    margin-top: auto;
+    font-size: 9pt;
+    line-height: 1.15;
+    font-weight: 600;
+  }
+  .tile-val small {
+    display: block;
+    margin-top: 2px;
+    color: var(--ink-3);
+    font-size: 7.15pt;
+    font-weight: 400;
+  }
+
+  .timeline-rail { position: relative; height: 44px; margin-top: 3px; }
+  .rail-line {
+    position: absolute;
+    top: 8px;
+    left: 6px;
+    right: 6px;
+    height: 2px;
+    background: var(--rule);
+  }
+  .rail-progress {
+    position: absolute;
+    top: 8px;
+    left: 6px;
+    height: 2px;
+    background: var(--accent);
+  }
+  .milestones {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+  }
+  .ms { display: flex; flex-direction: column; align-items: flex-start; }
+  .ms-dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--paper);
+    border: 2px solid var(--ink-4);
+    margin-left: 1px;
+    z-index: 1;
+  }
+  .ms.done .ms-dot { background: var(--accent); border-color: var(--accent); }
+  .ms.current .ms-dot { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(0,0,0,0.03); }
+  .ms-label {
+    margin-top: 6px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 5.55pt;
+    line-height: 1.18;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .ms-date {
+    margin-top: 2px;
+    font-size: 7.4pt;
+    font-weight: 600;
+  }
+
+  .status-grid { display: grid; grid-template-columns: 1.04fr 1.36fr; gap: 12px; }
+  .status-card {
+    background: var(--metric-bg);
+    color: var(--paper);
+    padding: 10px 11px 9px;
+    position: relative;
+  }
+  .status-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--metric-top);
+  }
+  .sc-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    align-items: baseline;
+  }
+  .sc-row .lbl {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 6pt;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.62);
+  }
+  .sc-row .val {
+    font-size: 8.8pt;
+    font-weight: 600;
+  }
+  .sc-row .val.ok { color: #95ddb0; }
+  .sc-row .val.watch { color: #f5d47a; }
+  .sc-row .val.risk { color: #ffd1d1; }
+  .sc-big {
+    margin-top: 5px;
+    display: flex;
+    align-items: baseline;
+    gap: 9px;
+  }
+  .sc-big .num {
+    font-family: 'Fraunces', serif;
+    font-size: 27pt;
+    line-height: 0.94;
+    color: var(--metric-accent);
+  }
+  .sc-big .cap {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 6.8pt;
+    line-height: 1.25;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.68);
+  }
+  .sc-bar { margin-top: 6px; height: 4px; background: rgba(255,255,255,0.12); }
+  .sc-bar-fill { height: 100%; background: var(--metric-top); }
+
+  .phases { display: flex; flex-direction: column; gap: 2px; }
+  .phase {
+    display: grid;
+    grid-template-columns: 14px 1fr auto auto;
+    gap: 6px;
+    align-items: center;
+    padding: 1px 0;
+    font-size: 7.9pt;
+    border-bottom: 1px dotted var(--rule-2);
+  }
+  .phase:last-child { border-bottom: 0; }
+  .phase .no,
+  .phase .pct,
+  .phase .state {
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .phase .no { font-size: 6.25pt; color: var(--ink-4); }
+  .phase .name { font-weight: 600; color: var(--ink-2); }
+  .phase.done .name { color: var(--ink); }
+  .phase.active .name { color: var(--accent-ink); }
+  .phase .pct { font-size: 6.5pt; color: var(--ink-3); }
+  .phase.active .pct { color: var(--accent); }
+  .phase .state {
+    font-size: 5.8pt;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border: 1px solid var(--rule);
+    min-width: 88px;
+    text-align: center;
+    color: var(--ink-4);
+  }
+  .phase.active .state { background: var(--accent-wash); border-color: rgba(0,0,0,0.08); color: var(--accent-ink); }
+  .phase.done .state { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+
+  .summary-note {
+    font-size: 8.3pt;
+    color: var(--ink-2);
+    line-height: 1.35;
+  }
+
+  .work-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .work-col h4 {
+    margin: 0 0 4px;
+    padding-bottom: 3px;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    justify-content: space-between;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 6.2pt;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .work-col h4 .tag { color: var(--accent); }
+  .work-col ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1px; }
+  .work-col li {
+    display: grid;
+    grid-template-columns: 12px 1fr auto;
+    gap: 6px;
+    align-items: baseline;
+    padding: 1px 0;
+    font-size: 8pt;
+    line-height: 1.28;
+  }
+  .ck {
+    width: 9px;
+    height: 9px;
+    border: 1px solid var(--ink-4);
+    position: relative;
+    transform: translateY(1px);
+  }
+  .work-col.left .ck { background: var(--ink); border-color: var(--ink); }
+  .work-col.left .ck::after {
+    content: "";
+    position: absolute;
+    left: 1px;
+    top: -1px;
+    width: 4px;
+    height: 6px;
+    border-right: 1.5px solid var(--paper);
+    border-bottom: 1.5px solid var(--paper);
+    transform: rotate(45deg);
+  }
+  .work-col.right .ck { border-color: var(--accent); }
+  .work-col.right .ck::after {
+    content: "";
+    position: absolute;
+    inset: 2px;
+    background: var(--accent);
+  }
+  .dt {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 6.2pt;
+    color: var(--ink-4);
+    text-transform: uppercase;
+  }
+
+  .keydates {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    border: 1px solid var(--rule);
+    background: var(--rule);
+    column-gap: 1px;
+  }
+  .kd {
+    background: var(--paper);
+    padding: 6px 8px;
+    min-height: 46px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .kd-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 5.4pt;
+    line-height: 1.28;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .kd-date {
+    margin-top: auto;
+    font-size: 8.6pt;
+    font-weight: 600;
+  }
+  .kd.hi { background: var(--metric-bg); }
+  .kd.hi .kd-label { color: rgba(255,255,255,0.58); }
+  .kd.hi .kd-date { color: var(--metric-accent); }
+  .kd-star {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    color: var(--accent-2);
+    font-size: 7pt;
+  }
+
+  .issues { display: flex; flex-direction: column; gap: 2px; }
+  .issue {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 8px;
+    align-items: baseline;
+    padding: 2px 0;
+    font-size: 8.05pt;
+    border-bottom: 1px dotted var(--rule-2);
+  }
+  .issue:last-child { border-bottom: 0; }
+  .flag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 5.75pt;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    min-width: 64px;
+    text-align: center;
+  }
+  .flag.open { background: var(--accent-wash); color: var(--accent-ink); border: 1px solid rgba(0,0,0,0.08); }
+  .flag.risk { background: #fdeaea; color: #a31021; border: 1px solid rgba(163,16,33,0.12); }
+  .flag.watch { background: #fbf1dc; color: #8c6518; border: 1px solid rgba(140,101,24,0.12); }
+  .txt { color: var(--ink-2); }
+  .own {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 6.1pt;
+    color: var(--ink-4);
+    text-transform: uppercase;
+  }
+
+  .contacts {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .contact {
+    padding: 6px 10px;
+    border-left: 1px solid var(--rule);
+  }
+  .contact:first-child {
+    border-left: 0;
+    padding-left: 0;
+  }
+  .contact-role {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 6.2pt;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .contact-name {
+    font-size: 9pt;
+    font-weight: 700;
+  }
+  .contact-org {
+    font-size: 7.1pt;
+    color: var(--ink-3);
+    margin-top: 1px;
+  }
+  .contact-line {
+    margin-top: 5px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 6.15pt;
+    color: var(--ink-3);
+    line-height: 1.5;
+  }
+  .contact-line .em { color: var(--accent-ink); }
+
+  .footer {
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 2px solid var(--ink);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .footer-brand .mk {
+    width: 18px;
+    height: 18px;
+    border: 1.25px solid var(--ink);
+    position: relative;
+  }
+  .footer-brand .mk::before {
+    content: "";
+    position: absolute;
+    inset: 3px;
+    background: var(--ink);
+  }
+  .footer-brand .wm {
+    font-family: 'Fraunces', serif;
+    font-size: 8pt;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+  .footer-brand .wm small {
+    display: block;
+    margin-top: 2px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 5.2pt;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .footer-meta {
+    text-align: right;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 5.9pt;
+    color: var(--ink-3);
+    line-height: 1.55;
+  }
+
+  .hidden { display: none; }
+
+  @media print {
+    html, body {
+      background: #fff;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    * {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    body {
+      display: block;
+      padding: 0;
+      font-size: 7.9pt;
+      line-height: 1.24;
+    }
+    .page {
+      width: 8.12in;
+      min-height: auto;
+      margin: 0.12in auto;
+      padding: 0.22in 0.28in 0.16in;
+      box-shadow: none;
+    }
+    .topbar { padding-bottom: 10px; }
+    .title-block { padding: 14px 0 12px; gap: 20px; }
+    .subtitle { margin-top: 7px; font-size: 9.6pt; }
+    .section { padding: 4px 0; }
+    .section-head { margin-bottom: 3px; }
+    .tiles .tile { min-height: 46px; padding: 5px 6px; gap: 2px; }
+    .timeline-rail { height: 39px; margin-top: 1px; }
+    .ms-label { margin-top: 4px; font-size: 5.2pt; }
+    .ms-date { font-size: 7pt; }
+    .status-grid { gap: 8px; }
+    .status-card { padding: 8px 9px 7px; }
+    .sc-big { margin-top: 3px; }
+    .sc-big .num { font-size: 24pt; }
+    .sc-bar { margin-top: 4px; }
+    .phases { gap: 1px; }
+    .phase { padding: 0; font-size: 7.55pt; }
+    .phase .state { min-width: 79px; padding: 1px 5px; }
+    .work-cols { gap: 10px; }
+    .work-col h4 { margin-bottom: 2px; padding-bottom: 2px; }
+    .work-col ul { gap: 0; }
+    .work-col li { padding: 0; line-height: 1.18; font-size: 7.7pt; }
+    .dt { font-size: 5.9pt; }
+    .keydates .kd { min-height: 40px; padding: 5px 6px; }
+    .kd-date { font-size: 8.2pt; }
+    .issues { gap: 1px; }
+    .issue { padding: 1px 0; font-size: 7.7pt; }
+    .contacts { margin-top: 1px; }
+    .contact { padding: 4px 8px; }
+    .contact:first-child { padding-left: 0; }
+    .contact-line { margin-top: 3px; line-height: 1.35; }
+    .footer { margin-top: 4px; padding-top: 4px; }
+    .footer-brand .wm { font-size: 7.4pt; }
+    .footer-brand .wm small { margin-top: 1px; font-size: 4.9pt; }
+    @page { size: letter; margin: 0; }
+  }
+</style>
+</head>
+<body>
+<script>
+  /*
+    AGENT UPDATE BLOCK
+    Replace only the values in this object for weekly project updates.
+    Keep the layout/CSS stable unless Buck asks for design changes.
+  */
+  const dashboardData = {
+    theme: 'tractor-supply',
+    baselineBrand: 'Baseline Development Companies',
+    baselineSubbrand: '',
+    footerBrandName: 'Baseline Development Companies, LLC',
+    reportTitle: 'CONSTRUCTION STATUS',
+    issuedDate: '09 / 04 / 2026',
+    statusPill: 'Active · On Schedule',
+    projectCode: 'TSC-SUMTER-SC',
+    projectType: 'Ground-Up Retail Development',
+    projectName: 'Tractor Supply',
+    projectEmphasis: 'Sumter, SC',
+    subtitle: 'The building pad is being built up, compacted, and moisture-conditioned this week, with building layout, footings, and underslab MEP planned next.',
+    titleSide: [
+      { label: 'SITE', values: ['28 Pack Rd.', 'Sumter, SC 29150'] },
+      { label: 'LANDLORD', values: ['Sumter SC Development Group, LLC'] }
+    ],
+    snapshot: [
+      { icon: 'tenant', label: 'Tenant', value: 'Tractor Supply Co.', subvalue: 'Ground-Up Store' },
+      { icon: 'building', label: 'Building Type', value: 'Freestanding', subvalue: 'Retail Building' },
+      { icon: 'delivery', label: 'Delivery', value: 'Developer Delivered', subvalue: 'Ground-Up BTS' },
+      { icon: 'gc', label: 'General Contractor', value: 'DooleyMack', subvalue: 'Prime GC' },
+      { icon: 'location', label: 'Location', value: 'Sumter, SC', subvalue: '28 Pack Rd.' }
+    ],
+    schedule: {
+      overallPercent: 9,
+      railPercent: 20,
+      milestones: [
+        { label: 'M1 · Start', date: 'Aug 17, 2026', state: 'done' },
+        { label: 'M2 · Pad Cert.', date: 'Sept 9, 2026', state: 'done' },
+        { label: 'M3 · Sitework', date: 'Oct 06, 2026', state: 'current' },
+        { label: 'M4 · Steel', date: 'Nov 23, 2026', state: 'upcoming' },
+        { label: 'M5 · CO / TCO', date: 'Feb 15, 2027', state: 'upcoming' },
+        { label: 'M6 · Turnover', date: 'Mar 14, 2027', state: 'upcoming' }
+      ]
+    },
+    currentStatus: {
+      trendText: '● On Schedule',
+      trendClass: 'ok',
+      completePercent: '9%',
+      dayCaption: 'On Schedule<br>Calculated Sep 04, 2026',
+      phases: [
+        { no: 'P1', name: 'Permitting & Pre-Mob', pct: 'Complete', state: 'Complete', stage: 'done' },
+        { no: 'P2', name: 'Mobilization & Earthwork', pct: '5%', state: 'In Progress', stage: 'active' },
+        { no: 'P3', name: 'Pad, Foundations & Slab', pct: '0%', state: 'Not Started', stage: 'upcoming' },
+        { no: 'P4', name: 'Masonry, Steel & Roofing', pct: '0%', state: 'Not Started', stage: 'upcoming' },
+        { no: 'P5', name: 'MEP, Sitework & Utilities', pct: '0%', state: 'Not Started', stage: 'upcoming' },
+        { no: 'P6', name: 'CO / Turnover', pct: '0%', state: 'Not Started', stage: 'upcoming' }
+      ]
+    },
+    completedThisWeek: {
+      heading: 'Completed · Week Ending 09/04',
+      tag: 'Building Pad',
+      items: [
+        { text: 'Installing lifts on building pad', date: 'WE 09/04' },
+        { text: 'Rolling and compacting building pad', date: 'WE 09/04' }
+      ]
+    },
+    plannedNext: {
+      heading: 'Planned · Next 2 Weeks',
+      tag: 'Look-Ahead',
+      items: [
+        { text: 'Building lay-out', date: 'Next 2 Wks' },
+        { text: 'Dig footers', date: 'Next 2 Wks' },
+        { text: 'Pour interior footers', date: 'Next 2 Wks' },
+        { text: 'Underslab plumbing', date: 'Next 2 Wks' },
+        { text: 'Underslab electric', date: 'Next 2 Wks' }
+      ]
+    },
+    keyDates: [
+      { label: 'Construction Start', date: '08/17/2026' },
+      { label: 'Permanent Power', date: '12/18/2026' },
+      { label: '42-Day Notice', date: '01/01/2027' },
+      { label: 'CO / TCO', date: '02/15/2027' },
+      { label: 'Fixture Date', date: '03/14/2027', highlight: true }
+    ],
+    issues: [
+      { flag: 'Watch', flagClass: 'watch', text: 'Permanent power is scheduled for 12/18/2026.', owner: '' },
+      { flag: 'Watch', flagClass: 'watch', text: '42-day notice is due 01/01/2027.', owner: '' }
+    ],
+    contacts: [
+      { role: "Landlord's Rep / PM", name: 'Buck Culbreth', org: 'Baseline Development Companies, LLC', email: 'buck@baselinedevelopment.com', phone: '919 · 222 · 6063' },
+      { role: 'General Contractor PM', name: 'Alec Villafana', org: 'DooleyMack Constructors of South Carolina', email: 'avillafana@dooleymacksc.com', phone: '843 · 830 · 8960' },
+      { role: 'Tenant PM', name: 'Paul Rondeau', org: 'Tractor Supply Company', email: 'prondeau@TractorSupply.com', phone: '813 · 298 · 2620' }
+    ],
+    footerLine: 'Retail · Ground-Up · Build-To-Suit',
+    footerMeta: []
+  };
+</script>
+
+<div class="page">
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true"></div>
+      <div>
+        <div class="brand-name" id="brand-name"></div>
+        <div class="brand-sub" id="brand-sub"></div>
+      </div>
+    </div>
+    <div class="doc-meta">
+      <div><strong id="report-title"></strong></div>
+      <div>Issued <span style="color:var(--ink)" id="issued-date"></span></div>
+      <div style="margin-top:4px"><span class="status-pill"><span class="dot"></span><span id="status-pill"></span></span></div>
+    </div>
+  </div>
+
+  <div class="title-block">
+    <div>
+      <div class="eyebrow">
+        <span class="bar"></span>
+        <span class="code" id="project-code"></span>
+        <span id="project-type"></span>
+      </div>
+      <h1><span id="project-name"></span> <em id="project-emphasis"></em></h1>
+      <div class="subtitle" id="subtitle"></div>
+    </div>
+    <div class="title-side" id="title-side"></div>
+  </div>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <span class="section-title">Project Snapshot</span>
+      <span class="section-rule"></span>
+    </div>
+    <div class="tiles" id="snapshot-tiles"></div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <span class="section-title">Schedule Summary</span>
+      <span class="section-rule"></span>
+    </div>
+    <div class="timeline-rail">
+      <div class="rail-line"></div>
+      <div class="rail-progress" id="rail-progress"></div>
+      <div class="milestones" id="milestones"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">03</span>
+      <span class="section-title">Current Status</span>
+      <span class="section-rule"></span>
+    </div>
+    <div class="status-grid">
+      <div class="status-card">
+        <div class="sc-row">
+          <span class="lbl">Schedule Elapsed</span>
+          <span class="val" id="trend-text"></span>
+        </div>
+        <div class="sc-big">
+          <span class="num" id="complete-percent"></span>
+          <span class="cap" id="day-caption"></span>
+        </div>
+        <div class="sc-bar"><div class="sc-bar-fill" id="sc-bar-fill"></div></div>
+      </div>
+      <div class="phases" id="phases"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">04</span>
+      <span class="section-title">Active Work</span>
+      <span class="section-rule"></span>
+    </div>
+    <div class="work-cols">
+      <div class="work-col left">
+        <h4><span id="completed-heading"></span><span class="tag" id="completed-tag"></span></h4>
+        <ul id="completed-list"></ul>
+      </div>
+      <div class="work-col right">
+        <h4><span id="planned-heading"></span><span class="tag" id="planned-tag"></span></h4>
+        <ul id="planned-list"></ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">05</span>
+      <span class="section-title">Key Dates &amp; Permits</span>
+      <span class="section-rule"></span>
+    </div>
+    <div class="keydates" id="keydates"></div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">06</span>
+      <span class="section-title">Issues &amp; Watch Items</span>
+      <span class="section-rule"></span>
+    </div>
+    <div class="issues" id="issues"></div>
+  </section>
+
+  <section class="section" style="padding-bottom:0;">
+    <div class="section-head">
+      <span class="section-num">07</span>
+      <span class="section-title">Key Contacts</span>
+      <span class="section-rule"></span>
+    </div>
+    <div class="contacts" id="contacts"></div>
+  </section>
+
+  <div class="footer">
+    <div class="footer-brand">
+      <div class="mk"></div>
+      <div class="wm">
+        <span id="footer-brand-name"></span>
+        <small id="footer-line"></small>
+      </div>
+    </div>
+    <div class="footer-meta" id="footer-meta"></div>
+  </div>
+</div>
+
+<script>
+  const el = id => document.getElementById(id);
+  const esc = value => String(value ?? '');
+
+  document.body.dataset.theme = dashboardData.theme;
+  document.title = `${dashboardData.projectCode} · ${dashboardData.projectName} ${dashboardData.projectEmphasis} · ${dashboardData.reportTitle}`;
+
+  el('brand-name').textContent = dashboardData.baselineBrand;
+  el('brand-sub').textContent = dashboardData.baselineSubbrand;
+  el('report-title').textContent = dashboardData.reportTitle;
+  el('issued-date').textContent = dashboardData.issuedDate;
+  el('status-pill').textContent = dashboardData.statusPill;
+  el('project-code').textContent = dashboardData.projectCode;
+  el('project-type').textContent = `· ${dashboardData.projectType}`;
+  el('project-name').textContent = dashboardData.projectName;
+  el('project-emphasis').textContent = dashboardData.projectEmphasis;
+  el('subtitle').textContent = dashboardData.subtitle;
+  el('footer-brand-name').textContent = dashboardData.footerBrandName || `${dashboardData.baselineBrand} ${dashboardData.baselineSubbrand}, LLC`;
+  el('footer-line').textContent = dashboardData.footerLine;
+  el('footer-meta').innerHTML = dashboardData.footerMeta.map(line => `<div>${esc(line)}</div>`).join('');
+
+  el('title-side').innerHTML = dashboardData.titleSide.map(group => `
+    <div>${esc(group.label)}</div>
+    ${group.values.map(v => `<div class="val">${esc(v)}</div>`).join('')}
+    `).join('<div style="margin-top:6px"></div>');
+
+  el('snapshot-tiles').innerHTML = dashboardData.snapshot.map(item => `
+    <div class="tile" data-icon="${esc(item.icon)}">
+      <div class="tile-icon"></div>
+      <div class="tile-label">${esc(item.label)}</div>
+      <div class="tile-val">${esc(item.value)}<small>${esc(item.subvalue)}</small></div>
+    </div>
+  `).join('');
+
+  const overallPercent = Math.max(0, Math.min(100, Number(dashboardData.schedule.overallPercent) || 0));
+  const railPercent = Math.max(0, Math.min(100, Number(dashboardData.schedule.railPercent ?? overallPercent) || 0));
+  el('rail-progress').style.width = `calc((100% - 12px) * ${railPercent / 100})`;
+  el('milestones').innerHTML = dashboardData.schedule.milestones.map(ms => `
+    <div class="ms ${esc(ms.state === 'done' ? 'done' : ms.state === 'current' ? 'current' : '')}">
+      <div class="ms-dot"></div>
+      <div class="ms-label">${esc(ms.label)}</div>
+      <div class="ms-date">${esc(ms.date)}</div>
+    </div>
+  `).join('');
+
+  el('trend-text').textContent = dashboardData.currentStatus.trendText;
+  el('trend-text').className = `val ${esc(dashboardData.currentStatus.trendClass)}`;
+  el('complete-percent').textContent = dashboardData.currentStatus.completePercent;
+  el('day-caption').innerHTML = dashboardData.currentStatus.dayCaption;
+  el('sc-bar-fill').style.width = `${overallPercent}%`;
+
+  el('phases').innerHTML = dashboardData.currentStatus.phases.map(phase => `
+    <div class="phase ${esc(phase.stage === 'done' ? 'done' : phase.stage === 'active' ? 'active' : '')}">
+      <span class="no">${esc(phase.no)}</span>
+      <span class="name">${esc(phase.name)}</span>
+      <span class="pct">${esc(phase.pct)}</span>
+      <span class="state">${esc(phase.state)}</span>
+    </div>
+  `).join('');
+
+  el('completed-heading').textContent = dashboardData.completedThisWeek.heading;
+  el('completed-tag').textContent = dashboardData.completedThisWeek.tag;
+  el('planned-heading').textContent = dashboardData.plannedNext.heading;
+  el('planned-tag').textContent = dashboardData.plannedNext.tag;
+
+  const renderWorkItems = items => items.map(item => `
+    <li><span class="ck"></span><span>${esc(item.text)}</span><span class="dt">${esc(item.date)}</span></li>
+  `).join('');
+  el('completed-list').innerHTML = renderWorkItems(dashboardData.completedThisWeek.items);
+  el('planned-list').innerHTML = renderWorkItems(dashboardData.plannedNext.items);
+
+  el('keydates').innerHTML = dashboardData.keyDates.map(item => `
+    <div class="kd ${item.highlight ? 'hi' : ''}">
+      ${item.highlight ? '<span class="kd-star">★</span>' : ''}
+      <div class="kd-label">${esc(item.label).replace(/\n/g, '<br>')}</div>
+      <div class="kd-date">${esc(item.date)}</div>
+    </div>
+  `).join('');
+
+  el('issues').innerHTML = dashboardData.issues.map(issue => `
+    <div class="issue">
+      <span class="flag ${esc(issue.flagClass)}">${esc(issue.flag)}</span>
+      <span class="txt">${esc(issue.text)}</span>
+      <span class="own">${esc(issue.owner)}</span>
+    </div>
+  `).join('');
+
+  el('contacts').innerHTML = dashboardData.contacts.map(contact => `
+    <div class="contact">
+      <div class="contact-role">${esc(contact.role)}</div>
+      <div class="contact-name">${esc(contact.name)}</div>
+      <div class="contact-org">${esc(contact.org)}</div>
+      <div class="contact-line"><span class="em">${esc(contact.email)}</span><br>${esc(contact.phone)}</div>
+    </div>
+  `).join('');
+</script>
+</body>
+</html>
