@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TSC Sumter SC — Status Sheet G-001</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Archivo+Narrow:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sheet:#fbfbf9; --grid:#e4e9ef; --ink:#1c2b3a; --line:#25405c;
+  --blue:#1f6fb2; --blueL:#e8f1f9; --red:#c0392b; --sub:#5a6b7d; --green:#2c7a52;
+  --sans:'Archivo',system-ui,sans-serif; --narrow:'Archivo Narrow',system-ui,sans-serif;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:#aeb8c2;color:var(--ink);font-family:var(--sans);}
+body{min-height:100vh;padding:24px 16px;}
+.sheet{max-width:1240px;margin:0 auto;background:var(--sheet);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:26px 26px;position:relative;box-shadow:0 20px 50px rgba(30,45,60,.4);
+  border:1px solid var(--line);}
+.frame{border:2.5px solid var(--line);margin:12px;position:relative;padding:0;}
+.frame::before{content:"";position:absolute;inset:6px;border:1px solid var(--line);pointer-events:none;}
+.inner{padding:26px 30px;}
+@media(max-width:720px){.inner{padding:20px;}}
+
+/* column/row bubbles along top */
+.bubbles{display:flex;gap:0;justify-content:space-between;margin-bottom:8px;}
+.bub{width:26px;height:26px;border:1.5px solid var(--line);border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-family:var(--narrow);font-weight:700;font-size:12px;color:var(--sub);background:var(--sheet);}
+
+/* title strip */
+.tstrip{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:16px;
+  border-bottom:2.5px solid var(--line);padding-bottom:14px;}
+.disc{font-family:var(--narrow);font-weight:700;font-size:12px;letter-spacing:.22em;color:var(--blue);text-transform:uppercase;}
+h1{font-family:var(--sans);font-weight:700;font-size:44px;letter-spacing:-.01em;margin:4px 0 4px;line-height:1;}
+h1 em{font-style:normal;color:var(--red);}
+.meta{font-family:var(--narrow);font-size:13.5px;color:var(--sub);letter-spacing:.02em;}
+.northbox{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.north{width:44px;height:44px;}
+.northlab{font-family:var(--narrow);font-weight:700;font-size:11px;letter-spacing:.16em;color:var(--sub);}
+
+/* keynote data cells */
+.keynotes{display:grid;grid-template-columns:repeat(6,1fr);border:1.5px solid var(--line);margin:18px 0 6px;}
+.kn{padding:12px 12px 11px;border-right:1.5px solid var(--line);position:relative;}
+.kn:last-child{border-right:none;}
+.kn .tick{position:absolute;top:-9px;left:10px;width:16px;height:16px;border:1.5px solid var(--line);border-radius:50%;
+  background:var(--sheet);font-family:var(--narrow);font-weight:700;font-size:9px;display:flex;align-items:center;justify-content:center;color:var(--blue);}
+.kn .kl{font-family:var(--narrow);font-weight:600;font-size:10.5px;letter-spacing:.1em;color:var(--sub);text-transform:uppercase;margin-top:6px;}
+.kn .kv{font-family:var(--sans);font-weight:700;font-size:20px;letter-spacing:-.01em;margin-top:3px;}
+.kn .kv.g{color:var(--green);} .kn .kv.r{color:var(--red);}
+.kn .kn2{font-size:11px;color:var(--sub);line-height:1.3;margin-top:3px;}
+@media(max-width:900px){.keynotes{grid-template-columns:repeat(2,1fr);}.kn{border-bottom:1.5px solid var(--line);}}
+
+.plan{display:grid;grid-template-columns:1.15fr .85fr;gap:0;border:1.5px solid var(--line);border-top:none;}
+@media(max-width:860px){.plan{grid-template-columns:1fr;}}
+.pane{padding:20px 22px;border-right:1.5px solid var(--line);}
+.pane:last-child{border-right:none;}
+.pane.b{border-top:1.5px solid var(--line);}
+.ph{font-family:var(--narrow);font-weight:700;font-size:14px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink);display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+.ph .dot{font-family:var(--sans);font-size:11px;color:var(--blue);border:1.5px solid var(--blue);border-radius:3px;padding:1px 6px;}
+
+/* leader-note priorities */
+.pnote{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid var(--grid);}
+.hex{flex:none;width:22px;height:22px;background:var(--blue);color:#fff;font-family:var(--narrow);font-weight:700;font-size:12px;
+  display:flex;align-items:center;justify-content:center;clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);}
+.pnote .pt{font-family:var(--sans);font-weight:600;font-size:14px;}
+.pnote .pd{font-family:var(--narrow);font-size:12.5px;color:var(--sub);line-height:1.45;margin-top:2px;}
+.badge{font-family:var(--narrow);font-weight:700;font-size:10px;letter-spacing:.1em;padding:3px 7px;border-radius:2px;height:fit-content;white-space:nowrap;text-transform:uppercase;}
+.badge.cur{background:var(--red);color:#fff;}
+.badge.wat{background:#f0d27a;color:#5a4600;}
+.badge.que{background:var(--blueL);color:var(--blue);border:1px solid #bcd7ec;}
+
+.dtable{width:100%;border-collapse:collapse;}
+.dtable th{font-family:var(--narrow);font-weight:700;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--sub);text-align:left;padding:8px 6px;border-bottom:1.5px solid var(--line);}
+.dtable td{padding:10px 6px;border-bottom:1px solid var(--grid);font-size:13.5px;vertical-align:top;}
+.dtable .a{width:55%;}
+.dtable .d{font-family:var(--narrow);font-size:12.5px;color:var(--sub);}
+.dtable .st{font-family:var(--narrow);font-weight:700;font-size:11px;}
+.st.open{color:var(--red);} .st.rec{color:var(--blue);} .st.que{color:var(--sub);}
+
+.rnote{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid var(--grid);}
+.rlv{font-family:var(--narrow);font-weight:700;font-size:10px;letter-spacing:.08em;min-width:48px;padding-top:2px;text-transform:uppercase;}
+.rlv.info{color:var(--green);} .rlv.watch{color:var(--red);}
+.rnote .rt{font-family:var(--sans);font-weight:600;font-size:13.5px;}
+.rnote .rd{font-family:var(--narrow);font-size:12.5px;color:var(--sub);line-height:1.45;margin-top:2px;}
+
+.rev{padding:11px 0;border-bottom:1px solid var(--grid);display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:baseline;}
+.revtri{width:0;height:0;border-left:9px solid transparent;border-right:9px solid transparent;border-bottom:15px solid var(--red);position:relative;}
+.revtri span{position:absolute;top:2px;left:-4px;width:8px;text-align:center;font-family:var(--narrow);font-weight:700;font-size:8px;color:#fff;}
+.rev .rvd{font-family:var(--narrow);font-weight:700;font-size:12px;color:var(--red);}
+.rev .rvt{font-family:var(--sans);font-weight:600;font-size:13.5px;}
+.rev .rvx{font-family:var(--narrow);font-size:12px;color:var(--sub);line-height:1.4;margin-top:1px;}
+
+/* title block bottom-right */
+.titleblock{display:grid;grid-template-columns:1fr 190px;border:1.5px solid var(--line);border-top:none;}
+.tb-l{padding:14px 18px;border-right:1.5px solid var(--line);display:flex;flex-direction:column;justify-content:center;gap:3px;}
+.tb-l .firm{font-family:var(--sans);font-weight:700;font-size:16px;letter-spacing:.02em;}
+.tb-l .firm span{color:var(--red);}
+.tb-l .tbmeta{font-family:var(--narrow);font-size:12px;color:var(--sub);}
+.tb-r{padding:12px 16px;display:flex;flex-direction:column;justify-content:space-between;}
+.tb-r .sn-lab{font-family:var(--narrow);font-weight:600;font-size:10px;letter-spacing:.14em;color:var(--sub);text-transform:uppercase;}
+.tb-r .sn{font-family:var(--sans);font-weight:700;font-size:30px;color:var(--blue);letter-spacing:.02em;}
+.tb-r .tbnote{font-family:var(--narrow);font-size:11px;color:var(--sub);}
+
+@media print{
+  body{background:#fff!important;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .sheet{box-shadow:none;}
+}
+
+/* Print: Letter portrait with the drawing-sheet theme retained. */
+@page{size:letter portrait;margin:.4in .4in .45in;}
+@media print{
+ :root{--sans:Arial,Helvetica,sans-serif;--narrow:'Arial Narrow',Arial,sans-serif;}
+ html,body{margin:0;padding:0;min-height:0;background:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+ .sheet{width:100%;max-width:none;box-shadow:none;border:0;}
+ .frame{margin:0;border:0;}
+ .frame::before{position:fixed;inset:0;border:4px double var(--line);}
+ .inner{padding:12px;}
+ .tstrip{position:relative;display:block;padding:0 46px 9px 0;}
+ .disc{font-size:8pt;} h1{font-size:26pt;margin:4px 0;}
+ .meta{font-size:8pt;line-height:1.3;}
+ .northbox{position:absolute;right:2px;top:0;gap:2px;}.north{width:33px;height:33px;}.northlab{font-size:8pt;}
+ .keynotes{grid-template-columns:repeat(3,minmax(0,1fr));margin:13px 0 0;background:var(--sheet);}
+ .kn{padding:8px 9px 6px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);}
+ .kn:nth-child(3n){border-right:0;}.kn:nth-child(n+4){border-bottom:0;}
+ .kn .kl{font-size:7.5pt;margin-top:2px;}.kn .kv{font-size:12pt;}.kn .kn2{font-size:7.5pt;}
+ .kn .tick{width:13px;height:13px;top:-7px;font-size:6.5pt;}
+ .kn:nth-child(n+4) .tick{top:2px;left:auto;right:4px;}
+ .plan{grid-template-columns:1.12fr .88fr;background:rgba(251,251,249,.94);break-inside:avoid;}
+ .pane{padding:9px 11px;min-width:0;}
+ .ph{font-size:9pt;letter-spacing:.05em;gap:6px;margin-bottom:4px;}.ph .dot{font-size:8pt;}
+ .pnote{gap:7px;padding:5px 0;}.hex{width:18px;height:18px;font-size:8pt;}
+ .pnote .pt{font-size:9pt;line-height:1.25;}.pnote .pd{font-size:8pt;line-height:1.3;}
+ .badge{font-size:6.5pt;letter-spacing:.02em;padding:3px 4px;}
+ .rnote{gap:7px;padding:7px 0;}.rlv{font-size:7pt;min-width:30px;}
+ .rnote .rt{font-size:9pt;line-height:1.25;}.rnote .rd{font-size:8pt;line-height:1.3;}
+ .dtable th{font-size:7.5pt;padding:6px 4px;}.dtable td{font-size:9pt;padding:7px 4px;}
+ .dtable .d{font-size:8pt;}.dtable .st{font-size:7.5pt;white-space:nowrap;}
+ .rev{gap:8px;padding:4px 0;}.rev .rvd{font-size:8pt;}.rev .rvt{font-size:9pt;line-height:1.25;}.rev .rvx{font-size:8pt;line-height:1.3;}
+ .titleblock{grid-template-columns:1fr 155px;background:var(--sheet);break-inside:avoid;}
+ .tb-l,.tb-r{padding:8px 11px;}.tb-l .tbmeta{font-size:8pt;}.tb-r .sn-lab{font-size:7pt;}.tb-r .sn{font-size:20pt;}.tb-r .tbnote{font-size:7.5pt;}
+ .pnote,.rnote,.rev,tr{break-inside:avoid;}.ph{break-after:avoid;}
+}
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="frame">
+    <div class="inner">
+
+<div class="tstrip">
+        <div>
+          <div class="disc">General — Internal Project Status</div>
+          <h1>TSC <em>Sumter</em></h1>
+          <div class="meta">28 Pack Rd, Sumter SC 29150 &nbsp;|&nbsp; Tractor Supply Company &nbsp;|&nbsp; Construction — sitework underway</div>
+        </div>
+        <div class="northbox">
+          <svg class="north" viewBox="0 0 44 44">
+            <circle cx="22" cy="22" r="20" fill="none" stroke="#25405c" stroke-width="1.5"/>
+            <polygon points="22,5 27,24 22,20 17,24" fill="#c0392b"/>
+            <polygon points="22,20 27,24 22,39 17,24" fill="#1c2b3a"/>
+          </svg>
+          <div class="northlab">N</div>
+        </div>
+      </div>
+
+      <div class="keynotes">
+        <div class="kn"><div class="tick">1</div><div class="kl">Constr. start</div><div class="kv g">08/17/26</div><div class="kn2">Started as scheduled</div></div>
+        <div class="kn"><div class="tick">2</div><div class="kl">GC reported</div><div class="kv g">1%</div><div class="kn2">WE 08/21 physical progress</div></div>
+        <div class="kn"><div class="tick">3</div><div class="kl">Revised LAC</div><div class="kv">02/15/27</div><div class="kn2">NTP-driven</div></div>
+        <div class="kn"><div class="tick">4</div><div class="kl">Fixture date</div><div class="kv">03/14/27</div><div class="kn2">TSC target</div></div>
+        <div class="kn"><div class="tick">5</div><div class="kl">Bldg permit</div><div class="kv g">IN HAND</div><div class="kn2">No constraint</div></div>
+        <div class="kn"><div class="tick">6</div><div class="kl">Perm. power</div><div class="kv g">12/18/26</div><div class="kn2">On track — coordinate path</div></div>
+      </div>
+
+      <div class="plan">
+        <div class="pane">
+          <div class="ph"><span class="dot">01</span>This Week's Priorities</div>
+          <div class="pnote"><div class="hex">1</div><div><div class="pt">Confirm construction entrance &amp; silt fence installation</div><div class="pd">Locations staked; confirm installed controls are functioning as sitework advances.</div></div><span class="badge cur">Current</span></div>
+          <div class="pnote"><div class="hex">2</div><div><div class="pt">Resolve tree-easement scope with the GC</div><div class="pd">Scope of work has been provided to DooleyMack; discussion between Gavin Melia and Jeff Boyer is pending.</div></div><span class="badge cur">Current</span></div>
+          <div class="pnote"><div class="hex">3</div><div><div class="pt">Maintain Duke Energy service-path coordination</div><div class="pd">The service path is not at risk. Track Duke's tree trimming and the 12/18/26 energization milestone.</div></div><span class="badge cur">Current</span></div>
+          <div class="pnote"><div class="hex">4</div><div><div class="pt">Assign and calendar the 42-day notice</div><div class="pd">Responsibility needs to be clear ahead of the 01/01/27 due date.</div></div><span class="badge que">Queued</span></div>
+          <div class="pnote"><div class="hex">5</div><div><div class="pt">Flag Sumter business-license requirement early</div><div class="pd">Subs will need Sumter business licenses as a requirement for CO.</div></div><span class="badge que">Queued</span></div>
+        </div>
+        <div class="pane">
+          <div class="ph"><span class="dot">03</span>Risks &amp; Watch Items</div>
+          <div class="rnote"><div class="rlv watch">Watch</div><div><div class="rt">Tree easements pending owner / GC discussion</div><div class="rd">Scope has been provided to DooleyMack; Gavin Melia and Jeff Boyer still need to resolve the path forward.</div></div></div>
+          <div class="rnote"><div class="rlv info">Info</div><div><div class="rt">Duke Energy service path</div><div class="rd">Not at risk. Bill Bartlett has coordinated with Duke, which is mobilizing to trim trees along the off-property power-line path.</div></div></div>
+          <div class="rnote"><div class="rlv watch">Watch</div><div><div class="rt">42-day notice needs assigned responsibility</div><div class="rd">Notice due 01/01/27; assign ownership and calendar the deadline.</div></div></div>
+          <div class="rnote"><div class="rlv watch">Watch</div><div><div class="rt">Sub business licenses required for CO</div><div class="rd">Early compliance tracking needed to avoid closeout / CO delay.</div></div></div>
+        </div>
+
+        <div class="pane b">
+          <div class="ph"><span class="dot">02</span>Action Items</div>
+          <table class="dtable">
+            <thead><tr><th class="a">Action</th><th>Due</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td class="a">Confirm construction entrance &amp; silt fence installation</td><td class="d">Current</td><td class="st open">■ Open</td></tr>
+              <tr><td class="a">Resolve tree-easement scope between Gavin Melia and Jeff Boyer</td><td class="d">Pending discussion</td><td class="st open">■ Open</td></tr>
+              <tr><td class="a">Maintain Duke Energy service-path coordination</td><td class="d">12/18/26</td><td class="st rec">↻ Recurring</td></tr>
+              <tr><td class="a">Assign and issue the 42-day notice</td><td class="d">01/01/27</td><td class="st que">□ Queued</td></tr>
+              <tr><td class="a">Flag sub business-license requirement for CO</td><td class="d">Before CO</td><td class="st que">□ Queued</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pane b">
+          <div class="ph"><span class="dot">04</span>Recent Confirmed Activity</div>
+          <div class="rev"><div class="revtri"><span>1</span></div><div><div class="rvd">07/15</div><div class="rvt">NTP issued</div><div class="rvx">Start 08/17/26, revised LAC 02/15/27.</div></div></div>
+          <div class="rev"><div class="revtri"><span>2</span></div><div><div class="rvd">07/30</div><div class="rvt">Land closing completed</div><div class="rvx">Closed 07/30/26; site-start path proceeded under current permit conditions.</div></div></div>
+          <div class="rev"><div class="revtri"><span>3</span></div><div><div class="rvd">08/17</div><div class="rvt">Construction started as scheduled</div><div class="rvx">Entered mobilization and sitework under the controlling NTP start.</div></div></div>
+          <div class="rev"><div class="revtri"><span>4</span></div><div><div class="rvd">08/21</div><div class="rvt">SWPPP controls &amp; early sitework advanced</div><div class="rvx">SWPPP box installed; controls staked; tree removal, clearing and grubbing underway.</div></div></div>
+          <div class="rev"><div class="revtri"><span>5</span></div><div><div class="rvd">08/21</div><div class="rvt">LDP &amp; building permit confirmed in hand</div><div class="rvx">No current permit constraint reported for continuing sitework.</div></div></div>
+        </div>
+      </div>
+
+      <div class="titleblock">
+        <div class="tb-l">
+          <div class="tbmeta">Internal status set &nbsp;·&nbsp; Issued 09/07/26</div>
+        </div>
+        <div class="tb-r">
+          <div><div class="sn-lab">Sheet</div><div class="sn">G-001</div></div>
+          <div class="tbnote">Not for construction — status only</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>
